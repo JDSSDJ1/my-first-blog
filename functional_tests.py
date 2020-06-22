@@ -14,7 +14,7 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://127.0.0.1:8000')
 
         # Edith can see the title and header and it is about Joseph's Blog
-        self.assertIn('Joseph\'s blog', self.browser.title)
+        self.assertIn('Joseph\'s Blog', self.browser.title)
 
         self.fail('Finish the test!')
 
