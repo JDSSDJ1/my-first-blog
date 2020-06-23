@@ -4,12 +4,6 @@ from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.http import HttpResponse
 
-# from .forms import CVForm
-
 # Create your views here.
 def cv_page(request):
-    return HttpResponse('<html><title>Joseph\'s CV</title></html>')
-
-# def post_list(request):
-#     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-#     return render(request, 'blog/post_list.html', {'posts': posts})
+    return render(request, 'cv/cv.html')
