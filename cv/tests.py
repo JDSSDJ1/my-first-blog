@@ -19,7 +19,7 @@ class CVPageTest(TestCase):
         response = self.client.get('/cv/')
 
         html = response.content.decode('utf8')
-        self.assertTrue(html.startswith('<html>'))
+        self.assertTrue(html.strip().startswith('<html>'))
         self.assertIn('<title>Joseph\'s CV</title>', html)
         self.assertTrue(html.strip().endswith('</html>'))
 
