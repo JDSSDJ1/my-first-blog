@@ -6,4 +6,6 @@ from django.http import HttpResponse
 
 # Create your views here.
 def cv_page(request):
-    return render(request, 'cv/cv.html')
+    return render(request, 'cv/cv.html', {
+        'new_item_text': request.POST.get('item_text', ''),
+    })
