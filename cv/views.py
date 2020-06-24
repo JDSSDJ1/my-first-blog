@@ -3,9 +3,12 @@ from django.utils import timezone
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect
 from django.http import HttpResponse
+from cv.models import Item
 
-# Create your views here.
 def cv_page(request):
-    return render(request, 'cv/cv.html', {
-        'new_item_text': request.POST.get('item_text', ''),
-    })
+    if request.method == 'POST':
+        Item.objects.create(text=request.POST['item_text'])
+        return redirect('/cv/')
+
+    items = Item.objects.all()
+    return render(request, 'cv/cv.html', {'items': items})
