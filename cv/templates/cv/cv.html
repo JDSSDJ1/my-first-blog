@@ -1,6 +1,12 @@
 {% extends 'cv/base.html' %}
 
 {% block content %}
+    <h6>Basic</h6>
+{% endblock %}
+
+
+
+{% comment %} {% block content %}
     <h6>Information</h6>
     <form method="POST">
         <input name="item_text" id="id_new_item" placeholder="Enter a to-do item" />
@@ -11,4 +17,4 @@
             <tr><td>{{ forloop.counter }}:  {{ item.text }}</td></tr>
         {% endfor %}
    ​ </table>
-{% endblock %}
+{% endblock %} {% endcomment %}
