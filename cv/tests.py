@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 
 from cv.views import cv_page, cv_edit
 from blog.views import post_list
-# from cv.models import Item
+from cv.models import Section
 
 class HomePageTest(TestCase):
 
@@ -32,7 +32,18 @@ class CVPageTest(TestCase):
         html = response.content.decode('utf8')
         self.assertIn('href="/cv/edit/', html)
     
-    # def test_cv_page_uses_css(self):
+    def test_cv_page_uses_css(self):
+        response = self.client.get('/cv/')
+        html = response.content.decode('utf8')
+        self.assertIn('<link rel="stylesheet', html.strip()) # doesn't check if commented
+    
+    def test_cv_sections_can_be_viewed(self):
+        Section.objects.create(title='Activity 1', text='What I did')
+
+        response = self.client.get('/cv/')
+
+        self.assertIn('Activity 1', response.content.decode())
+        self.assertIn('What I did', response.content.decode())
 
 class CVEditTest(TestCase):
     
@@ -45,7 +56,14 @@ class CVEditTest(TestCase):
         self.assertTrue(html.strip().endswith('</html>'))
 
         self.assertTemplateUsed(response, 'cv/cv_edit.html')
+    
+    def test_cv_section_can_be_viewed_to_edit(self):
+        Section.objects.create(title='Activity 1', text='What I did')
 
+        response = self.client.get('/cv/edit/')
+
+        self.assertIn('Activity 1', response.content.decode())
+        self.assertIn('What I did', response.content.decode())
 
 
 

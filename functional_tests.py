@@ -101,9 +101,45 @@ class NewVisitorTest(unittest.TestCase):
         submitbox.click()
         time.sleep(1)
 
+        # Joseph should now be able to edit his cv
+        self.browser.get('http://127.0.0.1:8000/cv/edit')
+        time.sleep(1)
 
+        # Joseph Updates the first section on his CV
+        # thisSection = self.browser.find_elements_by_class_name('post-form')
+        theTitle = self.browser.find_elements_by_id('id_title')[0]
+        theTitle.clear()
+        theTitle.send_keys('Hello World!')
 
-        self.fail('Finish the test!')
+        theText = self.browser.find_elements_by_id('id_text')[0]
+        theText.clear()
+        theText.send_keys("Testing 1, 2, 3")
+
+        # Joseph Updates the second section on his CV
+        theTitle = self.browser.find_elements_by_id('id_title')[1]
+        theTitle.clear()
+        theTitle.send_keys('This is another Test')
+
+        theText = self.browser.find_elements_by_id('id_text')[1]
+        theText.clear()
+        theText.send_keys("Testing 4, 5, 6")
+
+        submitbox = self.browser.find_element_by_tag_name('button')
+        submitbox.click()
+
+        # Joseph Checks his cv was updated correctly
+        thisSection = self.browser.find_elements_by_class_name('section')
+        theTitle = thisSection[0].find_element_by_tag_name('h2').text
+        theText = thisSection[0].find_element_by_tag_name('p').text
+
+        self.assertIn('Hello World!', theTitle)
+        self.assertIn('Testing 1, 2, 3', theText)
+
+        theTitle = thisSection[1].find_element_by_tag_name('h2').text
+        theText = thisSection[1].find_element_by_tag_name('p').text
+
+        self.assertIn('This is another Test', theTitle)
+        self.assertIn('Testing 4, 5, 6', theText)
 
 
 

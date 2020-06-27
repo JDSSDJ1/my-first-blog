@@ -2,4 +2,11 @@
 
 {% block content %}
     <h6>Editing</h6>
+    {% for form in forms %}
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="save btn btn-default">Save & Submit</button>
+        </form>
+    {% endfor %}
+    
 {% endblock %}

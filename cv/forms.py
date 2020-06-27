@@ -1,5 +1,7 @@
-# from django import forms
+from django import forms
+from .models import Section
 
-# class CVForm(forms.ModelForm):
-#     class Meta:
-#         fields = ('title', 'text',)
+class SectionForm(forms.ModelForm):
+    class Meta:
+        model = Section
+        fields = ('title', 'text', 'order',)

@@ -1,7 +1,14 @@
 {% extends 'cv/base.html' %}
 
 {% block content %}
-    <h6>Basic</h6>
+    <h6>Joseph David Snell</h6>
+
+    {% for section in sections %}
+        <div class="section">
+            <h2> {{ section.title }}</h2>
+            <p>{{ section.text|linebreaksbr }}</p>
+        </div>
+    {% endfor %}
 {% endblock %}
 
 
