@@ -91,7 +91,7 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
         self.assertIn('ValueError', self.browser.title)
 
-        # Joseph Needs to Log in to edit the tests
+        # Joseph Needs to Log in to edit the sections
         self.browser.get('http://127.0.0.1:8000/admin')
         inputbox = self.browser.find_element_by_id('id_username')
         inputbox.send_keys('jdssdj1')
@@ -106,7 +106,7 @@ class NewVisitorTest(unittest.TestCase):
         time.sleep(1)
 
         # Joseph Updates the first section on his CV
-        # thisSection = self.browser.find_elements_by_class_name('post-form')
+        # thisSection = self.browser.find_elements_by_class_name('section-form')
         theTitle = self.browser.find_elements_by_id('id_title')[0]
         theTitle.clear()
         theTitle.send_keys('Hello World!')
@@ -124,7 +124,7 @@ class NewVisitorTest(unittest.TestCase):
         theText.clear()
         theText.send_keys("Testing 4, 5, 6")
 
-        submitbox = self.browser.find_element_by_tag_name('button')
+        submitbox = self.browser.find_element_by_class_name('save btn btn-default')
         submitbox.click()
 
         # Joseph Checks his cv was updated correctly
@@ -141,10 +141,29 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('This is another Test', theTitle)
         self.assertIn('Testing 4, 5, 6', theText)
 
+    def test_can_i_create_new_test(self):
+        # Joseph cannot add to the page without logging in
+        self.browser.get('http://127.0.0.1:8000/cv/edit')
+        submitbox = self.browser.find_element_by_tag_name('button')
+        submitbox.click()
+        time.sleep(1)
+        self.assertIn('ValueError', self.browser.title)
 
+        # Joseph Needs to Log in to add to the page
+        self.browser.get('http://127.0.0.1:8000/admin')
+        inputbox = self.browser.find_element_by_id('id_username')
+        inputbox.send_keys('jdssdj1')
+        inputbox = self.browser.find_element_by_id('id_password')
+        inputbox.send_keys('Meggy')
+        submitbox = self.browser.find_element_by_class_name('submit-row')
+        submitbox.click()
+        time.sleep(1)
 
+        # Joseph should now be able to add to his cv
+        self.browser.get('http://127.0.0.1:8000/cv/edit')
+        time.sleep(1)
 
-
+        self.fail('Finish the test!')
 
 
 

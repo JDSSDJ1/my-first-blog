@@ -15,14 +15,21 @@ def cv_edit(request):
     # return render(request, 'cv/cv_edit.html', {'section': section})
     if request.method == "POST":
         sections = Section.objects.all()
+        counter = 0
         for section in sections:
+            # rp = request.POST(section.pk)
+            print(request.POST)
+            print(request.POST.getlist('title'))
+            
             form = SectionForm(request.POST, instance=section)
             if form.is_valid():
-                print("Hello")
-                thisSection = form.save(commit=False)
                 
+                thisSection = form.save(commit=False)
+                thisSection.title = request.POST.getlist('title')[counter]
+                thisSection.text = request.POST.getlist('text')[counter]
                 thisSection.author = request.user
                 thisSection.save()
+            counter = counter + 1
         return redirect('cv_page')
     else:
         sections = Section.objects.all()
