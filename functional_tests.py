@@ -14,7 +14,7 @@ class NewVisitorTest(unittest.TestCase):
 
     # This functional test was made so I could practive using the commands
     def test_can_edit_a_blog_post(self):
-        self.fail('Test complete and should remain working')
+        # self.fail('Test complete and should remain working')
 
         # Joseph needs to log in
         self.browser.get('http://127.0.0.1:8000/admin')
@@ -79,14 +79,16 @@ class NewVisitorTest(unittest.TestCase):
         header_text = self.browser.find_element_by_tag_name('h1').text  
         self.assertIn('Joseph\'s CV', header_text)
 
-        
+        thisSection = self.browser.find_elements_by_class_name('section')
 
-        self.fail('Finish the test!')
+        self.assertTrue(len(thisSection) >= 1)
 
     def test_can_edit_cv(self):
         # Joseph cannot edit the page without logging in
         self.browser.get('http://127.0.0.1:8000/cv/edit')
-        submitbox = self.browser.find_element_by_tag_name('button')
+        
+        submitNo = len(self.browser.find_elements_by_tag_name('button')) - 1
+        submitbox = self.browser.find_elements_by_tag_name('button')[submitNo]
         submitbox.click()
         time.sleep(1)
         self.assertIn('ValueError', self.browser.title)
@@ -124,7 +126,7 @@ class NewVisitorTest(unittest.TestCase):
         theText.clear()
         theText.send_keys("Testing 4, 5, 6")
 
-        submitbox = self.browser.find_element_by_class_name('save btn btn-default')
+        submitbox = self.browser.find_elements_by_tag_name('button')[submitNo]
         submitbox.click()
 
         # Joseph Checks his cv was updated correctly
@@ -141,12 +143,20 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('This is another Test', theTitle)
         self.assertIn('Testing 4, 5, 6', theText)
 
-    def test_can_i_create_new_test(self):
+    def test_can_i_create_new_section(self):
+        self.fail('Don\'t want to make too many things')
+
+        # Joseph counts the number of sections on the page
+        self.browser.get('http://127.0.0.1:8000/cv')
+        noOfSections = len(self.browser.find_elements_by_class_name('section'))
+
         # Joseph cannot add to the page without logging in
         self.browser.get('http://127.0.0.1:8000/cv/edit')
-        submitbox = self.browser.find_element_by_tag_name('button')
+        submitNo = len(self.browser.find_elements_by_tag_name('button')) - 1
+        submitbox = self.browser.find_elements_by_tag_name('button')[submitNo]
         submitbox.click()
         time.sleep(1)
+
         self.assertIn('ValueError', self.browser.title)
 
         # Joseph Needs to Log in to add to the page
@@ -163,9 +173,82 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://127.0.0.1:8000/cv/edit')
         time.sleep(1)
 
-        self.fail('Finish the test!')
+        # Joseph clicks the button that enables him to add another section
+        addbox = self.browser.find_elements_by_tag_name('button')[0]
+        addbox.click()
+        time.sleep(1)
+        submitNo = submitNo + 1
 
+        # Joseph Writes in to the new title and text
+        final = len(self.browser.find_elements_by_id('id_title')) - 1
+        theTitle = self.browser.find_elements_by_id('id_title')[final]
+        theTitle.clear()
+        theTitle.send_keys('On the End')
 
+        theText = self.browser.find_elements_by_id('id_text')[final]
+        theText.clear()
+        theText.send_keys("We add this")
+
+        # Joseph submits the new section to be saved
+        submitbox = self.browser.find_elements_by_tag_name('button')[submitNo]
+        submitbox.click()
+        time.sleep(1)
+
+        # Joseph checks the new section did save
+        thisSection = self.browser.find_elements_by_class_name('section')
+        theTitle = thisSection[final].find_element_by_tag_name('h2').text
+        theText = thisSection[final].find_element_by_tag_name('p').text
+
+        self.assertIn('On the End', theTitle)
+        self.assertIn("We add this", theText)
+        self.assertTrue(len(thisSection) == noOfSections + 1)
+
+    def test_can_I_delete_sections(self):
+
+# Joseph counts the number of sections on the page
+        self.browser.get('http://127.0.0.1:8000/cv')
+        noOfSections = len(self.browser.find_elements_by_class_name('section'))
+
+        # Joseph cannot remove from the page without logging in
+        self.browser.get('http://127.0.0.1:8000/cv/edit')
+        submitNo = len(self.browser.find_elements_by_tag_name('button')) - 1
+        submitbox = self.browser.find_elements_by_tag_name('button')[submitNo]
+        submitbox.click()
+        time.sleep(1)
+
+        self.assertIn('ValueError', self.browser.title)
+
+        # Joseph Needs to Log in to remove from the page
+        self.browser.get('http://127.0.0.1:8000/admin')
+        inputbox = self.browser.find_element_by_id('id_username')
+        inputbox.send_keys('jdssdj1')
+        inputbox = self.browser.find_element_by_id('id_password')
+        inputbox.send_keys('Meggy')
+        submitbox = self.browser.find_element_by_class_name('submit-row')
+        submitbox.click()
+        time.sleep(1)
+
+        # Joseph should now be able to remove from his cv
+        self.browser.get('http://127.0.0.1:8000/cv/edit')
+        time.sleep(1)
+
+        #Joseph removes the section with number listed below, he reads it to check it has gone
+        deletedSection = 1
+        theTitle = self.browser.find_elements_by_id('id_title')[deletedSection]
+        theText = self.browser.find_elements_by_id('id_text')[deletedSection]
+        theButton = self.browser.find_elements_by_tag_name('button')[deletedSection + 1]
+        theButton.click()
+        time.sleep(1)
+
+        # Joseph counts the total sections to compare to the original total and sees whether there are less sections
+        thisSection = self.browser.find_elements_by_class_name('section')
+        self.assertTrue(len(thisSection) == noOfSections - 1)
+
+        # Joseph looks at the text to make sure the section has gone
+        theTitle2 = thisSection[deletedSection].find_element_by_tag_name('h2').text
+        theText2 = thisSection[deletedSection].find_element_by_tag_name('p').text
+        self.assertTrue(theTitle != theTitle2)
+        self.assertTrue(theText != theText2)
 
 
     # def check_for_row_in_list_table(self, row_text):

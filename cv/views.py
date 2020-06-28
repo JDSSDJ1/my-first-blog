@@ -13,23 +13,44 @@ def cv_page(request):
 def cv_edit(request):
     # section = SectionForm()
     # return render(request, 'cv/cv_edit.html', {'section': section})
+    
     if request.method == "POST":
-        sections = Section.objects.all()
-        counter = 0
-        for section in sections:
-            # rp = request.POST(section.pk)
-            print(request.POST)
-            print(request.POST.getlist('title'))
-            
-            form = SectionForm(request.POST, instance=section)
-            if form.is_valid():
+        if 'changeSection' in request.POST:
+            sections = Section.objects.all()
+            counter = 0
+            for section in sections:
+                form = SectionForm(request.POST, instance=section)
+                if form.is_valid():
+                    thisSection = form.save(commit=False)
+                    thisSection.title = request.POST.getlist('title')[counter]
+                    thisSection.text = request.POST.getlist('text')[counter]
+                    thisSection.author = request.user
+                    thisSection.save()
+                counter = counter + 1
+            if (len(request.POST.getlist('text')) - 1) == counter :
                 
-                thisSection = form.save(commit=False)
-                thisSection.title = request.POST.getlist('title')[counter]
-                thisSection.text = request.POST.getlist('text')[counter]
-                thisSection.author = request.user
-                thisSection.save()
-            counter = counter + 1
+                form = SectionForm(request.POST)
+                if form.is_valid():
+                    thisSection = form.save(commit=False)
+                    thisSection.title = request.POST.getlist('title')[counter]
+                    thisSection.text = request.POST.getlist('text')[counter]
+                    thisSection.author = request.user
+                    thisSection.save()
+
+        elif 'newSection' in request.POST:
+            sections = Section.objects.all()
+            counter = 0
+            forms = [None] * (len(sections) + 1)
+            for section in sections:
+                forms[counter] = SectionForm(instance=section)
+                counter = counter + 1
+            forms[counter] = SectionForm()
+            return render(request, 'cv/cv_edit.html', {'forms': forms})
+
+        elif 'deleteSection' in request.POST:
+            
+            print('Hello')
+
         return redirect('cv_page')
     else:
         sections = Section.objects.all()

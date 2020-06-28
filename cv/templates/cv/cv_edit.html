@@ -2,12 +2,16 @@
 
 {% block content %}
     <h6>Editing</h6>
-    
+    {% comment %} <form method="POST" class="new-section-form" action=''> {% csrf_token %} {% endcomment %}
+    {% comment %} </form> {% endcomment %}
     <form method="POST" class="section-form">{% csrf_token %}
+        <button type="submit" name="newSection" class="save btn btn-primary">Add New Section</button>
+        <p></p>
         {% for form in forms %}    
+            <button type="submit" name="deleteSection" class="save btn btn-primary">-</button>
             {{ form.as_p }}
         {% endfor %}
-        <button type="submit" class="save btn btn-default">Save & Submit</button>
+        <button type="submit" name="changeSection" class="save btn btn-primary">Save & Submit</button>
     </form>
     
 {% endblock %}
