@@ -11,9 +11,6 @@ def cv_page(request):
     return render(request, 'cv/cv.html', {'sections': sections})
 
 def cv_edit(request):
-    # section = SectionForm()
-    # return render(request, 'cv/cv_edit.html', {'section': section})
-    
     if request.method == "POST":
         if 'changeSection' in request.POST:
             sections = Section.objects.all()
@@ -47,11 +44,25 @@ def cv_edit(request):
             forms[counter] = SectionForm()
             return render(request, 'cv/cv_edit.html', {'forms': forms})
 
-        elif 'deleteSection' in request.POST:
-            
+        else:
+            sections = Section.objects.all()
+            counter = 0
+            print(request.POST)
+            # name = Section.objects.get(id=request.POST.id)
+            for section in sections:
+                if str(counter) in request.POST:
+                    section.delete()
+                counter = counter + 1
+
+            # name = request.POST.get("name")
+            # print(name)
+            # elif 'deleteSection' in request.POST:
+            # print(request.POST[len(request.POST) - 1])
+            # instance = Section.objects.get(id=request.POST.get(name))
+            # instance.delete() 
             print('Hello')
 
-        return redirect('cv_page')
+        return redirect('cv_edit')
     else:
         sections = Section.objects.all()
         counter = 0
@@ -60,30 +71,3 @@ def cv_edit(request):
             forms[counter] = SectionForm(instance=section)
             counter = counter + 1
     return render(request, 'cv/cv_edit.html', {'forms': forms})
-
-# if request.method == "POST":
-#         form = PostForm(request.POST)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.author = request.user
-#             post.published_date = timezone.now()
-#             post.save()
-#             return redirect('post_detail', pk=post.pk)
-#     else:
-#         form = PostForm()
-#     return render(request, 'blog/post_edit.html', {'form': form})
-
-
-
-
-
-
-
-
-# def cv_page(request):
-#     if request.method == 'POST':
-#         Item.objects.create(text=request.POST['item_text'])
-#         return redirect('/cv/')
-
-#     items = Item.objects.all()
-#     return render(request, 'cv/cv.html', {'items': items})

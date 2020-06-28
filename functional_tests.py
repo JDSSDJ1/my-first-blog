@@ -129,6 +129,7 @@ class NewVisitorTest(unittest.TestCase):
         submitbox = self.browser.find_elements_by_tag_name('button')[submitNo]
         submitbox.click()
 
+        self.browser.get('http://127.0.0.1:8000/cv/')
         # Joseph Checks his cv was updated correctly
         thisSection = self.browser.find_elements_by_class_name('section')
         theTitle = thisSection[0].find_element_by_tag_name('h2').text
@@ -144,8 +145,6 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('Testing 4, 5, 6', theText)
 
     def test_can_i_create_new_section(self):
-        self.fail('Don\'t want to make too many things')
-
         # Joseph counts the number of sections on the page
         self.browser.get('http://127.0.0.1:8000/cv')
         noOfSections = len(self.browser.find_elements_by_class_name('section'))
@@ -194,6 +193,7 @@ class NewVisitorTest(unittest.TestCase):
         submitbox.click()
         time.sleep(1)
 
+        self.browser.get('http://127.0.0.1:8000/cv/')
         # Joseph checks the new section did save
         thisSection = self.browser.find_elements_by_class_name('section')
         theTitle = thisSection[final].find_element_by_tag_name('h2').text
@@ -205,7 +205,7 @@ class NewVisitorTest(unittest.TestCase):
 
     def test_can_I_delete_sections(self):
 
-# Joseph counts the number of sections on the page
+        # Joseph counts the number of sections on the page
         self.browser.get('http://127.0.0.1:8000/cv')
         noOfSections = len(self.browser.find_elements_by_class_name('section'))
 
@@ -239,6 +239,9 @@ class NewVisitorTest(unittest.TestCase):
         theButton = self.browser.find_elements_by_tag_name('button')[deletedSection + 1]
         theButton.click()
         time.sleep(1)
+
+        # Joseph checks the main CV page for changes
+        self.browser.get('http://127.0.0.1:8000/cv')
 
         # Joseph counts the total sections to compare to the original total and sees whether there are less sections
         thisSection = self.browser.find_elements_by_class_name('section')

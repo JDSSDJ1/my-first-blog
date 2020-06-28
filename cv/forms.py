@@ -4,4 +4,4 @@ from .models import Section
 class SectionForm(forms.ModelForm):
     class Meta:
         model = Section
-        fields = ('title', 'text', 'order',)
+        fields = ('title', 'text',)
