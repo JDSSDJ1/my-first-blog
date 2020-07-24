@@ -5,6 +5,7 @@
 
     {% for section in sections %}
         <div class="section">
+            {% comment %} <h3> {{ section.part }}</h2> {% endcomment %}
             <h2> {{ section.title }}</h2>
             <p>{{ section.text|linebreaksbr }}</p>
         </div>

@@ -1,10 +1,20 @@
 from django.db import models
 from django.conf import settings
 
+PART_CHOICES = (
+    ('PROFILE','profile'),
+    ('CONTACT','contact'),
+    ('EDUCATION','education'),
+    ('EXPERIENCE','experience'),
+    ('INTEREST','interests'),
+)
+
+
 class Section(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     text = models.TextField()
+    part = models.CharField(max_length=10, choices=PART_CHOICES, default='education')
 
     def publish(self):
         self.save()
