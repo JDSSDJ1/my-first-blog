@@ -232,7 +232,7 @@ class NewVisitorTest(unittest.TestCase):
         self.browser.get('http://127.0.0.1:8000/cv/edit')
         time.sleep(1)
 
-        #Joseph removes the section with number listed below, he reads it to check it has gone
+        #Joseph removes the section with number listed below, then reads it to check it has gone
         deletedSection = 1
         theTitle = self.browser.find_elements_by_id('id_title')[deletedSection]
         theText = self.browser.find_elements_by_id('id_text')[deletedSection]
