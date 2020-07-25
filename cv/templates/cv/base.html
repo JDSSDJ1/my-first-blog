@@ -10,7 +10,12 @@
     </head>
     <body>
         <div class="page-header">
-            <a href="{% url 'cv_edit' %}" <p>Update CV</p></a>
+            <a href="{% url 'home' %}" <p1>Home</p1></a>
+            <a href="{% url 'post_list' %}" <p1>Blog</p1></a>
+            <a href="{% url 'cv_page' %}" <p1>CV</p1></a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'cv_edit' %}" <p>Update CV</p></a>
+            {% endif %}
             <h1><a href="/cv/">Joseph's CV</a></h1>
         </div>
         <div class="content container">

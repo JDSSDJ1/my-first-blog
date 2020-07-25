@@ -253,6 +253,12 @@ class NewVisitorTest(unittest.TestCase):
         self.assertTrue(theTitle != theTitle2)
         self.assertTrue(theText != theText2)
 
+    def test_access_cv_from_home(self):
+        self.browser.get('http://127.0.0.1:8000')
+        link = self.browser.find_elements_by_tag_name('a')[2]
+        link.click()
+        time.sleep(0)
+        self.assertTrue(self.browser.current_url == 'http://127.0.0.1:8000/cv/')
 
     # def check_for_row_in_list_table(self, row_text):
     #     table = self.browser.find_element_by_id('id_list_table')
