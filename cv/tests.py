@@ -7,6 +7,9 @@ from cv.views import cv_page, cv_edit
 from blog.views import post_list
 from cv.models import Section
 
+class LoginTest(TestCase):
+    # Make login class thing then cleanup or somethoing...
+
 class HomePageTest(TestCase):
 
     def test_root_url_resolves_to_post_list_view(self):
@@ -28,6 +31,7 @@ class CVPageTest(TestCase):
         self.assertTemplateUsed(response, 'cv/cv.html')
     
     def test_has_button_that_allows_edits(self):
+
         response = self.client.get('/cv/')
         html = response.content.decode('utf8')
         self.assertIn('href="/cv/edit/', html)

@@ -13,6 +13,7 @@
             <a href="{% url 'home' %}" <p1>Home</p1></a>
             <a href="{% url 'post_list' %}" <p1>Blog</p1></a>
             <a href="{% url 'cv_page' %}" <p1>CV</p1></a>
+            <a href="/admin" <p1>Login</p1></a>
             {% if user.is_authenticated %}
                 <a href="{% url 'cv_edit' %}" class="top-menu"> <p1>Update CV<span  class="glyphicon glyphicon-plus"></span> </p1></a>
             {% endif %}
