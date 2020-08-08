@@ -3,18 +3,26 @@ from django.urls import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
+from django.contrib.auth.models import User
+from django.test import Client
+
 from cv.views import cv_page, cv_edit
 from blog.views import post_list
 from cv.models import Section
 
 class LoginTest(TestCase):
-    # Make login class thing then cleanup or somethoing...
+    def test_can_find_valid_authentication_url(self):
+        response = self.client.get('/admin/')
+        html = response.content.decode('utf8')
+        self.assertEqual(response.status_code,302)
 
-class HomePageTest(TestCase):
+    def test_can_authenticate(self):
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
 
-    def test_root_url_resolves_to_post_list_view(self):
-        found = resolve('/')
-        self.assertEqual(found.func, post_list)
+        c = Client()
+        logged_in = c.login(username = 'testuser', password='12345')
 
 class CVPageTest(TestCase):
 
@@ -31,8 +39,14 @@ class CVPageTest(TestCase):
         self.assertTemplateUsed(response, 'cv/cv.html')
     
     def test_has_button_that_allows_edits(self):
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
 
-        response = self.client.get('/cv/')
+        c = Client()
+        logged_in = c.login(username = 'testuser', password='12345')
+
+        response = c.get('/cv/')
         html = response.content.decode('utf8')
         self.assertIn('href="/cv/edit/', html)
     
@@ -42,7 +56,10 @@ class CVPageTest(TestCase):
         self.assertIn('<link rel="stylesheet', html.strip()) # doesn't check if commented
     
     def test_cv_sections_can_be_viewed(self):
-        Section.objects.create(title='Activity 1', text='What I did')
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        Section.objects.create(author = user, title='Activity 1', text='What I did')
 
         response = self.client.get('/cv/')
 
@@ -62,7 +79,11 @@ class CVEditTest(TestCase):
         self.assertTemplateUsed(response, 'cv/cv_edit.html')
     
     def test_cv_section_can_be_viewed_to_edit(self):
-        Section.objects.create(title='Activity 1', text='What I did')
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+
+        Section.objects.create(author = user, title='Activity 1', text='What I did')
 
         response = self.client.get('/cv/edit/')
 
